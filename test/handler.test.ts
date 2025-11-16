@@ -1,18 +1,18 @@
-import { handleRequest } from '../src/handler'
-import makeServiceWorkerEnv from 'service-worker-mock'
+import { SELF } from 'cloudflare:test';
+import { expect, it } from 'vitest';
 
-declare var global: any
-
-describe('handle', () => {
-  beforeEach(() => {
-    Object.assign(global, makeServiceWorkerEnv())
-    jest.resetModules()
-  })
-
-  test('handle GET', async () => {
-    const result = await handleRequest(new Request('/', { method: 'GET' }))
-    expect(result.status).toEqual(200)
-    const text = await result.text()
-    expect(text).toEqual('request method: GET')
-  })
-})
+it('dispatches fetch event', async () => {
+  // `SELF` here points to the worker running in the current isolate.
+  // This gets its handler from the `main` option in `vitest.config.mts`.
+  // Importantly, it uses the exact `import("../src").default` instance we could
+  // import in this file as its handler.
+  const response = await SELF.fetch(
+    'http://example.com/artist/Hatsune+Miku/images',
+  );
+	const json = await response.json()
+  expect(json).toEqual({
+    small: expect.stringContaining('https://'),
+    large: expect.stringContaining('https://'),
+  });
+	expect(json.small).not.toEqual(json.large);
+});

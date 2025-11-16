@@ -4,11 +4,6 @@ export class ImageUrlRewriter implements HTMLRewriterElementContentHandlers {
     if (!this.url) {
       this.url = element.getAttribute('src') ?? '';
     }
-
-    console.log(
-      '🚀 ~ file: image-url.rewriter.ts ~ line 3 ~ ImageUrlRewriter ~ element ~ element',
-      this.url,
-    );
   }
 
   public getUrl(): string {

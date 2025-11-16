@@ -19,6 +19,15 @@ export async function handleRequest(request: Request): Promise<Response> {
 
   const lastFmResponse = await fetch(
     `https://www.last.fm/music/${artist}/+images`,
+    {
+      headers: {
+        accept:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+        'accept-language': 'en-US,en;q=0.7',
+        cookie:
+          'X-UA-Device-Type=desktop; X-UA-Country-Code=UK; not_first_visit=1; lpfrmo=0; lfmanon=0',
+      },
+    },
   );
 
   const imageUrlRewriter = new ImageUrlRewriter();
